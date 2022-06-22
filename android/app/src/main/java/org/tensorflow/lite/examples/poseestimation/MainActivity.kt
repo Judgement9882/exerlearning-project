@@ -42,11 +42,13 @@ import kotlinx.coroutines.launch
 import org.tensorflow.lite.examples.poseestimation.camera.CameraSource
 import org.tensorflow.lite.examples.poseestimation.data.Device
 import org.tensorflow.lite.examples.poseestimation.ml.*
+import org.tensorflow.lite.examples.poseestimation.VisualizationUtils
 
 import org.tensorflow.lite.examples.poseestimation.data.BodyPart
 import java.lang.Math.abs
 import java.lang.Math.atan2
 import kotlin.math.PI
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -87,7 +89,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vClassificationOption: View
     private var cameraSource: CameraSource? = null
     private var isClassifyPose = false
+
+    // 추가 변수===============================================
     private lateinit var countLay : TextView
+    private lateinit var percentLay : TextView
+    var StartAngle = 30
+    var StopAngle = 70
+    // 추가 변수===============================================
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -175,6 +183,7 @@ class MainActivity : AppCompatActivity() {
         swClassification = findViewById(R.id.swPoseClassification)
         vClassificationOption = findViewById(R.id.vClassificationOption)
         countLay = findViewById(R.id.countLayout)
+        percentLay = findViewById(R.id.percent)
         initSpinner()
 
         spnModel.setSelection(modelPos)
@@ -230,15 +239,35 @@ class MainActivity : AppCompatActivity() {
                             // tvScore.text = calculateAngle(CameraSource.firstX, CameraSource.firstY, CameraSource.secondX, CameraSource.secondY, CameraSource.thirdX, CameraSource.thirdY).toString()
                             Log.d("test : ", calculateAngle(CameraSource.firstX, CameraSource.firstY, CameraSource.secondX, CameraSource.secondY, CameraSource.thirdX, CameraSource.thirdY).toString())
                             exer_angle = calculateAngle(CameraSource.firstX, CameraSource.firstY, CameraSource.secondX, CameraSource.secondY, CameraSource.thirdX, CameraSource.thirdY)
-                            if ((exer_angle > 70) and (exer_flag == 0)) {
+                            if ((exer_angle > StopAngle) and (exer_flag == 0)) {
                                 exer_count++
                                 exer_flag = 1
                             }
-                            else if ((exer_angle < 30) and (exer_flag==1)){
+                            else if ((exer_angle < StartAngle) and (exer_flag==1)){
                                 exer_flag = 0
                             }
                             countLay.text = "Count : " + exer_count.toString()
 
+                            // 22.06.22 강준영
+                            // 각도에 따른 운동 진행도와 그에 따른 텍스트 색깔 변화 ===========================
+                            if (exer_angle < StartAngle) percentLay.text ="0%"
+                            else if(exer_angle > StopAngle) percentLay.text ="100%"
+                            else {
+                                percentLay.text = ((100*(exer_angle-StartAngle)/(StopAngle - StartAngle)).roundToInt()).toString() + "%"
+                                if ( 100*(exer_angle-StartAngle)/(StopAngle - StartAngle) < StartAngle) {
+                                    percentLay.setTextColor(Color.RED)
+                                    VisualizationUtils.SkeletonLineColor = Color.RED
+                                }
+                                else if (100*(exer_angle-StartAngle)/(StopAngle - StartAngle) > 65) {
+                                    percentLay.setTextColor(Color.GREEN)
+                                    VisualizationUtils.SkeletonLineColor = Color.GREEN
+                                }
+                                else {
+                                    percentLay.setTextColor(Color.YELLOW)
+                                    VisualizationUtils.SkeletonLineColor = Color.YELLOW
+                                }
+                            }
+                            // ========================================================================
 
                             poseLabels?.sortedByDescending { it.second }?.let {
                                 tvClassificationValue1.text = getString(
@@ -277,8 +306,6 @@ class MainActivity : AppCompatActivity() {
 
         return angle
     }
-
-
 
 
     private fun convertPoseLabels(pair: Pair<String, Float>?): String {
