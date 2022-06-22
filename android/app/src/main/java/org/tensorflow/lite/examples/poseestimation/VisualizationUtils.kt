@@ -38,6 +38,10 @@ object VisualizationUtils {
     /** Distance from person id to the nose keypoint.  */
     private const val PERSON_ID_MARGIN = 6f
 
+
+    var SkeletonColor = Color.BLUE
+    var SkeletonLineColor = Color.RED
+
     /** Pair of keypoints to draw lines between.  */
     private val bodyJoints = listOf(
         Pair(BodyPart.NOSE, BodyPart.LEFT_EYE),
@@ -68,12 +72,14 @@ object VisualizationUtils {
     ): Bitmap {
         val paintCircle = Paint().apply {
             strokeWidth = CIRCLE_RADIUS
-            color = Color.BLUE
+            color = SkeletonColor
+            // color = Color.BLUE
             style = Paint.Style.FILL
         }
         val paintLine = Paint().apply {
             strokeWidth = LINE_WIDTH
-            color = Color.RED
+            color = SkeletonLineColor
+            // color = Color.RED
             style = Paint.Style.STROKE
         }
 
