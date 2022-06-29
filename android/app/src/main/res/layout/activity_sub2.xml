@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/bottom_sheet_layout"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="398dp"
+        android:layout_height="134dp"
+        android:text="INU Exerlearning"
+        android:textColor="@color/purple_500"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/countLayout"
+        android:layout_width="223dp"
+        android:layout_height="480dp"
+        android:text="Count : "
+        android:textAlignment="center"
+        android:textColor="#FFFF0000"
+        android:textScaleX="1"
+        android:textSize="50dp"
+        android:translationY="50dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

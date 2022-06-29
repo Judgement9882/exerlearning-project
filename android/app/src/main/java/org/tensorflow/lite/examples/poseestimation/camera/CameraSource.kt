@@ -58,12 +58,7 @@ class CameraSource(
     companion object {
         private const val PREVIEW_WIDTH = 640
         private const val PREVIEW_HEIGHT = 480
-        public var firstX = 1.0
-        public var firstY = 1.0
-        public var secondX = 1.0
-        public var secondY = 1.0
-        public var thirdX = 1.0
-        public var thirdY = 1.0
+        public var pointX = 1.0f
         /** Threshold for confidence score. */
         private const val MIN_CONFIDENCE = .2f
         private const val TAG = "Camera Source"
@@ -284,7 +279,7 @@ class CameraSource(
     }
 
     private val bodyJoints = listOf(
-        Triple(BodyPart.LEFT_ANKLE, BodyPart.LEFT_HIP, BodyPart.RIGHT_KNEE),
+        Triple(BodyPart.LEFT_SHOULDER, BodyPart.LEFT_ELBOW, BodyPart.LEFT_WRIST),
         //Triple(BodyPart.RIGHT_SHOULDER, BodyPart.RIGHT_ELBOW, BodyPart.RIGHT_WRIST),
     )
 
@@ -299,12 +294,7 @@ class CameraSource(
 //                Log.v("어깨 : ", pointA.x.toString() + ',' + pointA.y.toString())
 //                Log.v("팔꿈치 : ", pointB.x.toString() + ',' + pointB.y.toString())
 //                Log.v("손목 : ", pointC.x.toString() + ',' + pointC.y.toString())
-                firstX = pointA.x.toDouble()
-                firstY = pointA.y.toDouble()
-                secondX = pointB.x.toDouble()
-                secondY = pointB.y.toDouble()
-                thirdX = pointC.x.toDouble()
-                thirdY = pointC.y.toDouble()
+                pointX = pointA.x
             }
         }
     }
